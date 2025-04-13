@@ -1,0 +1,26 @@
+version: "3.8"  # Docker Compose file format version
+
+services:
+  # PostgreSQL container for local development
+  postgres:
+    container_name: postgres-sql-bsn  # Custom name for easier reference
+    image: postgres                   # Official Postgres image from Docker Hub
+    environment:
+      POSTGRES_USER: username        # DB username
+      POSTGRES_PASSWORD: password    # DB password
+      PGDATA: /var/lib/postgresql/data  # Path inside container for storing DB files
+      POSTGRES_DB: security_component   # DB to create on container startup
+    volumes:
+      - postgres:/data/postgres      # Persist DB data on host using named volume
+    ports:
+      - 5432:5432                    # Expose Postgres on localhost:5432
+    networks:
+      - spring-demo                  # Attach to custom network
+    restart: unless-stopped          # Restart policy (recommended for dev)
+
+  # MailDev – dummy SMTP server with a web UI https://github.com/maildev/maildev
+  mail-dev:
+    container_name: mail-dev-bsn     # Custom name for this container
+    image: maildev/maildev           # Lightweight dev-only mail server
+    ports:
+      - 1080:1080                    # Web UI (view inbox) → http://localhost:1080

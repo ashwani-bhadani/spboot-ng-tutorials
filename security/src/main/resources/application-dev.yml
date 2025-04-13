@@ -1,0 +1,32 @@
+#application-dev.yml inherits properties from application.yml and overrides the values defined there (if the same keys exist), when the active profile is set to dev.
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/security_component
+    username: username  #not the hikari password
+    password: password
+    driver-class-name: org.postgresql.Driver  # Optional – Spring auto-detects it, driver class name
+  jpa:
+    hibernate:
+      ddl-auto: update  # Can be: none, validate, update, create, create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:   #for dev need to setup own smtp server not use from github
+    host: localhost  #for a valid server n=just need to replace host, user & pass, rest below stays same
+    port: 1025
+    username: username
+    password: password
+    properties:
+      mail:
+        smtp:
+          trust: "*"   #what we want to trust -> trust all here
+        auth: true
+        starttls:   #an TLS security provided here
+          enable: true
+        connectiontimeout: 5000 #TTL settings
+        timeout: 3000
+        writetimeout: 5000
