@@ -17,3 +17,11 @@ spring:
 springdoc:
   default-produces-media-type: application/json
 
+app:
+  security:
+    jwt:
+      secret-key: V2o4Qk5vWmR0czA5cGdWYkQ5SmRjZVpCSU1iYzhWZ2V5Y0x4cE9Yeg==
+      expiration: 3600
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
