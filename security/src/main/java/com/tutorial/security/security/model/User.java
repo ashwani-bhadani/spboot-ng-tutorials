@@ -1,15 +1,6 @@
 package com.tutorial.security.security.model;
 
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,10 +8,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data // includes getters, setters, equals, hashCode
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "USER_TB")
 @EntityListeners(AuditingEntityListener.class) //enabling JPA entity auditing to track timestamp of lastupdate etc, always in main add @EnableJPaAuditing
@@ -81,8 +85,7 @@ public class User implements Principal, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of();
-        return this.roles.stream()
+       return  this.roles.stream()
                 .map( r -> new SimpleGrantedAuthority(
                         r.getRoleName()
                 ))
@@ -126,5 +129,128 @@ public class User implements Principal, UserDetails {
     public String getFullName() {
         return firstName.concat(" ").concat(lastName);
     }
+    
+    //getters & setters
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public LocalDate getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public Boolean getAccountLocked() {
+		return accountLocked;
+	}
+
+	public void setAccountLocked(Boolean accountLocked) {
+		this.accountLocked = accountLocked;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/** All args constructor
+	 * @param userId
+	 * @param firstName
+	 * @param lastName
+	 * @param dateOfBirth
+	 * @param accountLocked
+	 * @param enabled
+	 * @param email
+	 * @param password
+	 * @param createdDate
+	 * @param lastModifiedDate
+	 * @param roles
+	 */
+	public User(Long userId, String firstName, String lastName, LocalDate dateOfBirth, Boolean accountLocked,
+			Boolean enabled, String email, String password, LocalDateTime createdDate, LocalDateTime lastModifiedDate,
+			List<Role> roles) {
+		super();
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.accountLocked = accountLocked;
+		this.enabled = enabled;
+		this.email = email;
+		this.password = password;
+		this.createdDate = createdDate;
+		this.lastModifiedDate = lastModifiedDate;
+		this.roles = roles;
+	}
+
+	/**
+	 * Default Constructor
+	 */
+	public User() {
+		super();
+	}
 
 }

@@ -44,20 +44,19 @@ public class AuthenticationService {
     public void register(RegistrationRequest request) throws MessagingException {
         //apply custom/default(USER) role, validate via email
         //TODO: exception handling to be added
-        var userRole = roleRepository.findByName("USER")
+        var userRole = roleRepository.findByRoleName("USER")
                 .orElseThrow(
                         () -> new IllegalStateException("ROLE USER was not initialized")
                 );
 
-        var user = User.builder()
-                .firstName(request.firstName())
-                .lastName(request.lastName())
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password())) //inside the app password must always stay encrypted
-                .accountLocked(false)
-                .enabled(false)
-                .roles(List.of(userRole))
-                .build();
+        var user = new User();
+                user.setFirstName(request.firstName());
+                user.setLastName(request.lastName());
+                user.setEmail(request.email());
+                user.setPassword(passwordEncoder.encode(request.password())); //inside the app password must always stay encrypted
+                user.setAccountLocked(false);
+                user.setEnabled(false);
+                user.setRoles(List.of(userRole));
 
         userRepository.save(user);
         sendValidationEmail(user);
@@ -72,12 +71,11 @@ public class AuthenticationService {
     private String generateAndSaveActivationToken(User user){
         //generate a token
         String generatedToken = generateActivationCode(6); //generate a code of a length
-        var token = Token.builder()
-                .token(generatedToken)
-                .createdOn(LocalDateTime.now())
-                .expiryOn(LocalDateTime.now().plusMinutes(15))
-                .user(user)
-                .build();
+        var token = new Token();
+          token.setToken(generatedToken);
+          token.setCreatedOn(LocalDateTime.now());
+          token.setExpiryOn(LocalDateTime.now().plusMinutes(15));
+          token.setUser(user);
         tokenRepository.save(token);
         return generatedToken;
     }

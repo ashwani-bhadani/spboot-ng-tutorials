@@ -2,13 +2,13 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/security_component
+    url: jdbc:postgresql://localhost:5433/security_info
     username: username  #not the hikari password
     password: password
     driver-class-name: org.postgresql.Driver  # Optional – Spring auto-detects it, driver class name
   jpa:
     hibernate:
-      ddl-auto: update  # Can be: none, validate, update, create, create-drop
+      ddl-auto: create  # Can be: none, validate, update, create, create-drop
     show-sql: true
     properties:
       hibernate:
